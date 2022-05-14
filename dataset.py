@@ -6,39 +6,6 @@ from sklearn.model_selection import StratifiedShuffleSplit
 
 device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 
-# Loops through a directory of images and creates tensor with demographic data, and removes from 
-# x and y arrays images that are missing associated demographics data:
-def createDemoTensor(image_path, array_x, array_y, id_dict, demographics):
-    i = 0
-    demo = torch.empty((array_x.shape[0], 4))
-    
-    # loops through each file in the directory
-    with os.scandir(image_path) as files:
-        for file in files:
-            fileName = file.name
-            
-            # Get the correct image ID using filename:
-            if fileName.startswith("CEPK"):
-                id = fileName[fileName.find('CEPK'):fileName.find('CEPK')+7].lower()
-            elif fileName.startswith("TKA"):
-                id = fileName[fileName.find('TKA'):fileName.find('TKA')+6]
-            else:
-                id = fileName[fileName.find('VIN'):fileName.find('VIN')+13]
-                
-            # If there isn't demographic data for this file, remove it from the dataset:
-            if id not in id_dict:
-                print("Missing demographic data for", fileName)
-                array_x = torch.cat((array_x[:i, :], array_x[i+1:, :]))
-                demo = torch.cat((demo[:i, :], demo[i+1:, :]))
-                array_y = torch.cat((array_y[:i, :], array_y[i+1:, :]))
-                continue
-                
-            # Add row of demographics data to demo:
-            j = id_dict[id]
-            demo[i] = torch.Tensor([float(demographics[j][0]), float(demographics[j][1]), float(demographics[j][2]), float(demographics[j][3])]).type(torch.FloatTensor)
-            i += 1
-    return demo, array_x, array_y
-
 def to_rgb(array):
     empty_array = np.empty((array.shape[0], 3, 64, 64))
     for j in range(len(array)):

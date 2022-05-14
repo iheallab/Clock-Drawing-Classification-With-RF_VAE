@@ -4,13 +4,13 @@ from solver import full_evaluation
 import torch
 import sys
 
-dementia_path = 'notebooks/data/dementia_clocks/images/' # path for clock drawings from patients with dementia
-control_path = 'notebooks/data/control_clocks/images/' # path for clock drawings from patients marked as control
+dementia_path = './data/dementia_clocks/' # path for clock drawings from patients with dementia
+control_path = './data/control_clocks/' # path for clock drawings from patients marked as control
 
 # Demographics files should include the filename, then age, race, gender, and years of education.
-dementia_demo_path = "notebooks/data/dementia_demographics.csv" # path for demographics .csv file of patients with dementia
-control_demo_path = "notebooks/data/control_demographics.csv" # path for demographics .csv file of patients marked as control
-rfvae_path = "notebooks/10d_fvae" # path to pretrained RFVAE used for encoding the clock drawings 
+dementia_demo_path = "./data/dementia_demographics.csv" # path for demographics .csv file of patients with dementia
+control_demo_path = "./data/control_demographics.csv" # path for demographics .csv file of patients marked as control
+rfvae_path = "10d_rfvae" # path to pretrained RFVAE used for encoding the clock drawings 
 vae_dims = 10 # number of dimensions in the VAE
 
 device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
